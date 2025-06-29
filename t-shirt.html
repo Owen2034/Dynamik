@@ -3,12 +3,83 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>T-Shirt - Dynamik</title>
+  <title>Bike Chain - Dynamik</title>
   <link rel="stylesheet" href="styles.css"/>
   <link rel="stylesheet" href="https://cdn.snipcart.com/themes/v3.3.0/default/snipcart.css" />
 </head>
 <body>
-  <a href="index.html" class="back-link">← Back to Shop</a>
+<nav>
+  <h1>Dynamik</h1>
+  <ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="all-products.html">Products</a></li>
+    <li><a href="index.html#about">About</a></li>
+  </ul>
+  <div class="nav-search">
+    <input type="text" id="global-search" placeholder="Search...">
+    <ul id="search-results" class="search-dropdown"></ul>
+  </div>
+</nav>
+
+
+<script>
+  const products = [
+    { name: "Dynamik T-Shirt", url: "product-bike-jersey.html" },
+    { name: "Dynamik Shorts", url: "product-bike-shorts.html" },
+    { name: "Dynamik Hoodie", url: "product-bike-gloves.html" }
+  ];
+
+  const searchInput = document.getElementById("global-search");
+  const resultsList = document.getElementById("search-results");
+
+  searchInput.addEventListener("input", () => {
+    const query = searchInput.value.toLowerCase();
+    resultsList.innerHTML = "";
+
+    if (!query) {
+      resultsList.style.display = "none";
+      return;
+    }
+
+    const matches = products.filter(product =>
+      product.name.toLowerCase().includes(query)
+    );
+
+    if (matches.length > 0) {
+      resultsList.style.display = "block";
+      matches.forEach(product => {
+        const li = document.createElement("li");
+        li.textContent = product.name;
+        li.addEventListener("click", () => {
+          window.location.href = product.url;
+        });
+        resultsList.appendChild(li);
+      });
+    } else {
+      resultsList.style.display = "none";
+    }
+  });
+
+  // On Enter key, go to all-products.html with query
+  searchInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      const query = searchInput.value.trim();
+      if (query) {
+        window.location.href = `all-products.html?search=${encodeURIComponent(query)}`;
+      }
+    }
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!e.target.closest(".nav-search")) {
+      resultsList.style.display = "none";
+    }
+  });
+</script>
+
+
+
 
 <main class="product-page">
   <img src="https://media.istockphoto.com/id/482948743/photo/blank-white-t-shirt-front-with-clipping-path.jpg?s=612x612&w=0&k=20&c=cJG_B0mOIG42FKtC_rqIeZCClYOj7UCFNNs9WTkYEEE=" alt="Product Name">
