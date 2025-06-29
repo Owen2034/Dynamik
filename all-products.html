@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>All Products - Dynamik Bike Clothing</title>
+  <link rel="stylesheet" href="styles.css"/>
+  <link rel="stylesheet" href="https://cdn.snipcart.com/themes/v3.3.0/default/snipcart.css" />
+</head>
+<body>
+
+<nav>
+  <h1>Dynamik</h1>
+  <ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="all-products.html">Products</a></li>
+    <li><a href="index.html#about">About</a></li>
+  </ul>
+  <div class="nav-search">
+    <input type="text" id="global-search" placeholder="Search...">
+    <ul id="search-results" class="search-dropdown"></ul>
+  </div>
+</nav>
+
+
+<script>
+  const products = [
+    { name: "Dynamik T-Shirt", url: "product-bike-jersey.html" },
+    { name: "Dynamik Shorts", url: "product-bike-shorts.html" },
+    { name: "Dynamik Hoodie", url: "product-bike-gloves.html" }
+  ];
+
+  const searchInput = document.getElementById("global-search");
+  const resultsList = document.getElementById("search-results");
+
+  searchInput.addEventListener("input", () => {
+    const query = searchInput.value.toLowerCase();
+    resultsList.innerHTML = "";
+
+    if (!query) {
+      resultsList.style.display = "none";
+      return;
+    }
+
+    const matches = products.filter(product =>
+      product.name.toLowerCase().includes(query)
+    );
+
+    if (matches.length > 0) {
+      resultsList.style.display = "block";
+      matches.forEach(product => {
+        const li = document.createElement("li");
+        li.textContent = product.name;
+        li.addEventListener("click", () => {
+          window.location.href = product.url;
+        });
+        resultsList.appendChild(li);
+      });
+    } else {
+      resultsList.style.display = "none";
+    }
+  });
+
+  // On Enter key, go to all-products.html with query
+  searchInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      const query = searchInput.value.trim();
+      if (query) {
+        window.location.href = `all-products.html?search=${encodeURIComponent(query)}`;
+      }
+    }
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!e.target.closest(".nav-search")) {
+      resultsList.style.display = "none";
+    }
+  });
+</script>
+
+
+
+  <!-- Product Section -->
+  <section class="products-section">
+    <h2 class="products-title">All Products</h2>
+
+
+    <!-- Product Grid -->
+    <main class="product-grid">
+
+      <a class="product" href="product-bike-jersey.html">
+        <img src="https://media.istockphoto.com/id/482948743/photo/blank-white-t-shirt-front-with-clipping-path.jpg?s=612x612&w=0&k=20&c=cJG_B0mOIG42FKtC_rqIeZCClYOj7UCFNNs9WTkYEEE=" alt="Bike Jersey"/>
+        <h2>Dynamik T-Shirt</h2>
+        <p>£19.99</p>
+      </a>
+
+      <a class="product" href="product-bike-shorts.html">
+        <img src="https://media.istockphoto.com/id/1237985231/photo/shorts.jpg?s=612x612&w=0&k=20&c=O-52YF684BxeC8EGHu9I68ujBzaPuukYnJrcjshmKb4=" alt="Bike Shorts"/>
+        <h2>Dynamik Shorts</h2>
+        <p>£14.99</p>
+      </a>
+
+      <a class="product" href="product-bike-gloves.html">
+        <img src="https://media.istockphoto.com/id/1142211733/photo/front-of-sweatshirt-with-hood-isolated-on-white-background.jpg?s=612x612&w=0&k=20&c=inMPwtP-ebqhXD9_A3bHETPkyC37x0rFNSLYgf6rLMM=" alt="Bike Gloves"/>
+        <h2>Dynamik Hoodie</h2>
+        <p>£24.99</p>
+      </a>
+
+      <p id="no-results" style="display: none; text-align: center; font-style: italic; margin-top: 1rem;">No products found.</p>
+
+
+    </main>
+  </section>
+
+  <!-- Snipcart -->
+  <div hidden id="snipcart" data-api-key="YOUR_PUBLIC_API_KEY_HERE"></div>
+  <script async src="https://cdn.snipcart.com/themes/v3.3.0/default/snipcart.js"></script>
+
+<script>
+  const productSearchInput = document.getElementById('product-search');
+  const allProducts = document.querySelectorAll('.product-grid .product');
+
+  function filterProducts(query) {
+    const q = query.toLowerCase();
+    let hasMatch = false;
+
+    allProducts.forEach(product => {
+      const name = product.querySelector('h2').textContent.toLowerCase();
+      const matches = q && name.includes(q); // strict match to typed letters
+      product.style.display = matches ? 'block' : 'none';
+      if (matches) hasMatch = true;
+    });
+
+    // Optional: message if no match found
+    const noResultMsg = document.getElementById('no-results');
+    if (noResultMsg) noResultMsg.style.display = hasMatch ? 'none' : 'block';
+  }
+
+  // Event listener on input
+  productSearchInput.addEventListener('input', () => {
+    const query = productSearchInput.value.trim();
+    filterProducts(query);
+  });
+
+  // Check URL param on page load
+  const urlParams = new URLSearchParams(window.location.search);
+  const searchQuery = urlParams.get('search');
+  if (searchQuery) {
+    productSearchInput.value = searchQuery;
+    filterProducts(searchQuery);
+  }
+</script>
+
+
+
+</body>
+</html>
